@@ -1,0 +1,100 @@
+{
+  "name": "onedev-vsix",
+  "displayName": "OneDev-VSIX",
+  "description": "Unofficial OneDev Integration for VSCode",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "OneDev",
+      "properties": {
+        "onedev.servers": {
+          "type": "array",
+          "default": [],
+          "description": "List of OneDev servers",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id":    { "type": "string", "description": "Unique ID for this server" },
+              "label": { "type": "string", "description": "Display name" },
+              "url":   { "type": "string", "description": "Base URL e.g. https://onedev.studio.local" },
+              "username": { "type": "string", "description": "Your OneDev username" },
+              "token": { "type": "string", "description": "API access token" }
+            }
+          }
+        },
+        "onedev.activeServer": {
+          "type": "string",
+          "default": "",
+          "description": "ID of the currently active OneDev server"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "onedev-sidebar",
+          "title": "OneDev",
+          "icon": "$(server)"
+        }
+      ]
+    },
+    "views": {
+      "onedev-sidebar": [
+        {
+          "id": "onedevProjects",
+          "name": "OneDev Projects",
+          "icon": "$(repo)"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "onedev.switchServer",
+        "title": "OneDev: Switch Active Server"
+      },
+      {
+        "command": "onedev.refreshProjects",
+        "title": "OneDev: Refresh Projects"
+      },
+      {
+        "command": "onedev.openProjectInBrowser",
+        "title": "OneDev: Open Project in Browser"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "onedev.refreshProjects",
+          "when": "view == onedevProjects",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.110.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.56.1",
+    "eslint": "^9.39.3",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
